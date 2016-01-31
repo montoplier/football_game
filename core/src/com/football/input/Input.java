@@ -9,7 +9,7 @@ import com.badlogic.gdx.InputProcessor;
  * this basically just moves the camera right now
  * will need to be used for game input, probably will just have camera follow the ball eventually
  */
-public class Input implements InputProcessor{
+public class Input implements InputProcessor {
 	
 	//specific key-value variables to listen for elsewhere
 	public boolean leftHeld = false;

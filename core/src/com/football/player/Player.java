@@ -13,14 +13,15 @@ public class Player {
 	//image of the unit
 	Texture curTexture;
 	
-	public Player(int offsetX, int offsetY, Side side) {
+	public Player(int offsetX, int offsetY, Side side, Texture texture) {
 		this.offsetX = offsetX;
 		this.offsetY = offsetY;
 		this.side = side;
+		this.curTexture = texture;
 		if(this.side == Side.OFFENSE) {
-			this.curTexture = new Texture(Gdx.files.internal("player_o.png"));
+			this.curTexture = new Texture(Gdx.files.internal("images/player_o.png"));
 		} else if(this.side == Side.DEFENSE) {
-			this.curTexture = new Texture(Gdx.files.internal("player_x.png"));
+			this.curTexture = new Texture(Gdx.files.internal("images/player_x.png"));
 		}
 	}
 	

@@ -1,13 +1,19 @@
 package com.football.game;
 
+import java.awt.Point;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.XmlReader;
+import com.badlogic.gdx.utils.XmlReader.Element;
 import com.football.player.Player;
 import com.football.player.Side;
 import com.football.input.Input;
@@ -18,7 +24,10 @@ public class Main extends ApplicationAdapter {
     OrthographicCamera camera;
     int cameraScrollSpeed = 5;
     
+    //utility stuff
     Input input;
+    PlayBuilder playBuilder;
+    
     //game objects
     ArrayList<Player> players = new ArrayList<Player>();
 	Texture fieldTexture;
@@ -30,6 +39,7 @@ public class Main extends ApplicationAdapter {
 	@Override
 	public void create () {
 		input = new Input();
+		playBuilder = new PlayBuilder();
 		initializeField();
 		initializeCamera();
 		initializePlayers();
@@ -102,7 +112,7 @@ public class Main extends ApplicationAdapter {
 	
 	//set up field image and get sizes
 	public void initializeField() {
-		this.fieldTexture = new Texture(Gdx.files.internal("field_75.png"));
+		this.fieldTexture = new Texture(Gdx.files.internal("images/field_75.png"));
 		this.fieldWidth = fieldTexture.getWidth();
 		this.fieldHeight = fieldTexture.getHeight();
 		//I think these will always be zero
@@ -126,8 +136,7 @@ public class Main extends ApplicationAdapter {
 	 * This is just hardcoded for now
 	 */
 	public void initializePlayers() {
-		//putting single player on offense in the hosrizontal middle of the field
-		Player tempPlayer = new Player(fieldWidth/2, 20, Side.OFFENSE);
-		players.add(tempPlayer);
+		ArrayList<Player> curPlayers = playBuilder.loadPlay("test_formation", new Point(fieldWidth/2, 250));
+		this.players = curPlayers;
 	}
 }
