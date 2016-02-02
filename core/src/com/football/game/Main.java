@@ -1,5 +1,3 @@
-//Test 02/01/2016 10:20pm - Joel
-
 package com.football.game;
 
 import java.awt.Point;
