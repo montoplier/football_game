@@ -1,21 +1,16 @@
 package com.football.game;
 
 import java.awt.Point;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.XmlReader;
-import com.badlogic.gdx.utils.XmlReader.Element;
+import com.badlogic.gdx.math.Vector3;
 import com.football.player.Player;
-import com.football.player.Side;
 import com.football.input.Input;
 
 public class Main extends ApplicationAdapter {
@@ -67,6 +62,9 @@ public class Main extends ApplicationAdapter {
 	 */
 	public void gameLoop() {
 		setCameraPosition();
+		for(Player curPlayer : this.players){
+			curPlayer.update();
+		}
 	}
 	
 	/**
@@ -128,6 +126,7 @@ public class Main extends ApplicationAdapter {
         float h = Gdx.graphics.getHeight();
         this.camera = new OrthographicCamera();
         camera.setToOrtho(false,w,h);
+        camera.position.set(575, 250, 0);
         camera.update();
 	}
 	

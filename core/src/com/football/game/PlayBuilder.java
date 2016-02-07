@@ -10,6 +10,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlReader.Element;
+import com.football.action.Action;
+import com.football.action.Node;
+import com.football.action.Route;
 import com.football.player.Halfback;
 import com.football.player.Player;
 import com.football.player.Quarterback;
@@ -119,7 +122,55 @@ public class PlayBuilder {
 		} else {
 			retPlayer = new Player(xPos, yPos, curSide, curTexture);
 		}
+		//get action from XML and set players initial action
+		Action curAction = getActionFromXML(xmlPlayer, retPlayer);
+		retPlayer.setAction(curAction);
+		if(curAction instanceof Route) {
+			Route curRoute = (Route) curAction;
+			retPlayer.setRoute(curRoute);
+		}
 		return retPlayer;
+	}
+	
+	/**
+	 * Take in XML, find the action tag and build out the
+	 * resulting Action object
+	 * @param xmlPlayer - full XML of current player
+	 * @return Action object for current action
+	 */
+	public Action getActionFromXML(Element xmlPlayer, Player curPlayer) {
+		Action returnAction = null;
+		Element action = xmlPlayer.getChildByName("action");
+		if(action != null) {
+			String actionType = action.get("type");
+			//determine what kind of action this is by the type value
+			if(actionType.equalsIgnoreCase("route")) {
+				Element xmlRoute = action.getChildByName("route");
+				returnAction = getRouteFromXML(xmlRoute, curPlayer);
+			}
+		}
+		return returnAction;
+	}
+	
+	/**
+	 * Build out a route from nodes in route XML element
+	 * @param xmlRoute - XML route element
+	 * @return - Route object with path nodes 
+	 */
+	public Route getRouteFromXML(Element xmlRoute, Player curPlayer) {
+		Route returnRoute = new Route();
+		Array<Element> nodes = xmlRoute.getChildrenByName("node");
+		ArrayList<Node> curPath = new ArrayList<Node>();
+		for(Element node : nodes) {
+			int nodeX = Integer.parseInt(node.get("x").toString());
+			int nodeY = Integer.parseInt(node.get("y").toString());
+			int offsetX = getOffsetXPos(nodeX, curPlayer.getOffsetX());
+			int offsetY = getOffsetYPos(nodeY, curPlayer.getOffsetY());
+			Node curNode = new Node(offsetX, offsetY);
+			curPath.add(curNode);
+		}
+		returnRoute.setPath(curPath);
+		return returnRoute;
 	}
 	
 	/**

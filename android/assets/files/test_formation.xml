@@ -1,16 +1,55 @@
 <formation>
 	<side>offense</side>
 	<player>
-		<type>quarterback</type>
+		<type>center</type>
+		<action>
+		    <type>route</type>
+		    <route>
+			    <node>
+			        <x>-1</x>
+			        <y>0</y>
+			    </node>
+		    </route>
+		</action>
 		<x>0</x>
 		<y>0</y>
 	</player>
 	<player>
-		<type>halfback</type>
+		<type>quarterback</type>
+		<action>
+		    <type>route</type>
+		    <route>
+			    <node>
+			        <x>0</x>
+			        <y>-1</y>
+			    </node>
+			    <node>
+			        <x>-2</x>
+			        <y>-2</y>
+			    </node>
+		    </route>
+		</action>
 		<x>0</x>
 		<y>-1</y>
 	</player>
 	<player>
+		<action>
+		    <type>route</type>
+		    <route>
+			    <node>
+			        <x>0</x>
+			        <y>3</y>
+			    </node>
+			    <node>
+			        <x>-2</x>
+			        <y>5</y>
+			    </node>
+			    <node>
+			        <x>-2</x>
+			        <y>20</y>
+			    </node>
+		    </route>
+		</action>
 		<x>0</x>
 		<y>-2</y>
 	</player>
@@ -19,6 +58,15 @@
 		<y>0</y>
 	</player>
 	<player>
+		<action>
+		    <type>route</type>
+		    <route>
+			    <node>
+			        <x>-1</x>
+			        <y>0</y>
+			    </node>
+		    </route>
+		</action>
 		<x>-1</x>
 		<y>0</y>
 	</player>
@@ -27,6 +75,15 @@
 		<y>0</y>
 	</player>
 	<player>
+		<action>
+		    <type>route</type>
+		    <route>
+			    <node>
+			        <x>-1</x>
+			        <y>0</y>
+			    </node>
+		    </route>
+		</action>
 		<x>-2</x>
 		<y>0</y>
 	</player>
@@ -35,10 +92,28 @@
 		<y>0</y>
 	</player>
 	<player>
+		<action>
+		    <type>route</type>
+		    <route>
+			    <node>
+			        <x>0</x>
+			        <y>20</y>
+			    </node>
+		    </route>
+		</action>
 		<x>-5</x>
 		<y>0</y>
 	</player>
 	<player>
+		<action>
+		    <type>route</type>
+		    <route>
+			    <node>
+			        <x>0</x>
+			        <y>20</y>
+			    </node>
+		    </route>
+		</action>
 		<x>5</x>
 		<y>-1</y>
 	</player>
