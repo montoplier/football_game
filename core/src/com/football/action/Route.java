@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Route extends Action{
 
-	ArrayList<Node> path = new ArrayList<Node>();
+	ArrayList<Path> paths = new ArrayList<Path>();
 	
 	/**
 	 * Action class for running routes or just setting a path
@@ -13,15 +13,35 @@ public class Route extends Action{
 	 * this should probably be constructed with the path, but
 	 * I don't want to limit it at this point
 	 */
-	public Route() {
-		
+	public Route(ArrayList<Path> paths) {
+		this.paths = paths;
 	}
 	
-	public ArrayList<Node> getPath() {
-		return this.path;
+	public ArrayList<Path> getRoute() {
+		return this.paths;
 	}
 	
-	public void setPath(ArrayList<Node> path) {
-		this.path = path;
+	public void setRoute(ArrayList<Path> paths) {
+		this.paths = paths;
+	}
+	
+	public void setCurPath(Path path) {
+		this.paths.set(0, path);
+	}
+	
+	public Path getCurPath() {
+		if(this.paths.size() > 0) {
+			return this.paths.get(0);
+		} else {
+			return null;
+		}
+	}
+	
+	public Node getCurDestination() {
+		if(this.paths.size() > 0) {
+			return this.paths.get(0).getCurDestination();
+		} else {
+			return null;
+		}
 	}
 }

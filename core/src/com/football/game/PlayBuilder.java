@@ -12,7 +12,9 @@ import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlReader.Element;
 import com.football.action.Action;
 import com.football.action.Node;
+import com.football.action.Path;
 import com.football.action.Route;
+import com.football.player.AStar;
 import com.football.player.Halfback;
 import com.football.player.Player;
 import com.football.player.Quarterback;
@@ -28,6 +30,9 @@ public class PlayBuilder {
     Texture defenseTexture = new Texture(Gdx.files.internal("images/player_x.png"));
     int playerWidth = offenseTexture.getWidth();
     int playerHeight = offenseTexture.getHeight();
+    //this really isn't a good way to do this, but I'm just setting node width/height to equal player width/height
+    int nodeWidth = playerWidth;
+    int nodeHeight = playerHeight;
     
 	public PlayBuilder() {
 		
@@ -158,18 +163,22 @@ public class PlayBuilder {
 	 * @return - Route object with path nodes 
 	 */
 	public Route getRouteFromXML(Element xmlRoute, Player curPlayer) {
-		Route returnRoute = new Route();
 		Array<Element> nodes = xmlRoute.getChildrenByName("node");
-		ArrayList<Node> curPath = new ArrayList<Node>();
+		ArrayList<Path> paths = new ArrayList<Path>();
 		for(Element node : nodes) {
-			int nodeX = Integer.parseInt(node.get("x").toString());
-			int nodeY = Integer.parseInt(node.get("y").toString());
-			int offsetX = getOffsetXPos(nodeX, curPlayer.getOffsetX());
-			int offsetY = getOffsetYPos(nodeY, curPlayer.getOffsetY());
-			Node curNode = new Node(offsetX, offsetY);
-			curPath.add(curNode);
+			//nodes in relation to the play's position
+			int relativeNodeX = Integer.parseInt(node.get("x").toString());
+			int relativeNodeY = Integer.parseInt(node.get("y").toString());
+			int offsetX = getOffsetXPos(relativeNodeX, curPlayer.getOffsetX());
+			int offsetY = getOffsetYPos(relativeNodeY, curPlayer.getOffsetY());
+			//nodes in relation to the field
+			int globalNodeX = getNodeFromOffsetX(offsetX);
+			int globalNodeY = getNodeFromOffsetY(offsetY);
+			Node curNode = new Node(globalNodeX, globalNodeY, offsetX, offsetY);
+			Path curPath = new Path(curNode);
+			paths.add(curPath);
 		}
-		returnRoute.setPath(curPath);
+		Route returnRoute = new Route(paths);
 		return returnRoute;
 	}
 	
@@ -194,6 +203,26 @@ public class PlayBuilder {
 	 */
 	public int getOffsetYPos(int origYPos, int fieldPos) {
 		return (origYPos * this.playerHeight) + fieldPos;
+	}
+	
+
+	//This is duplicated from AStar, couldn't think of a good way to do this without duplicating
+	/**
+	 * Get the node value for the player based off of their offset
+	 * @param offsetX - position relative to the field
+	 * @return - node X value
+	 */
+	public int getNodeFromOffsetX(float offsetX) {
+		return (int) Math.floor(offsetX/this.nodeWidth);
+	}
+	
+	/**
+	 * Get the node value for the player based off of their offset
+	 * @param offsetY - position relative to the field
+	 * @return - node Y value
+	 */
+	public int getNodeFromOffsetY(float offsetY) {
+		return (int) Math.floor(offsetY/this.nodeHeight);
 	}
 	
 }

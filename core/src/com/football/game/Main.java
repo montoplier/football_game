@@ -10,7 +10,11 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
+import com.football.player.AStar;
 import com.football.player.Player;
+import com.football.action.Node;
+import com.football.action.Path;
+import com.football.action.Route;
 import com.football.input.Input;
 
 public class Main extends ApplicationAdapter {
@@ -22,14 +26,19 @@ public class Main extends ApplicationAdapter {
     //utility stuff
     Input input;
     PlayBuilder playBuilder;
+    AStar pathFinder;
     
     //game objects
     ArrayList<Player> players = new ArrayList<Player>();
 	Texture fieldTexture;
 	int fieldWidth;
 	int fieldHeight;
+	int nodeWidth;
+	int nodeHeight;
 	int fieldPosX;
 	int fieldPosY;
+	int playerWidth = 50;
+	int playerHeight = 50;
 	
 	@Override
 	public void create () {
@@ -38,6 +47,7 @@ public class Main extends ApplicationAdapter {
 		initializeField();
 		initializeCamera();
 		initializePlayers();
+		initializePathFinder();
 		batch = new SpriteBatch();
 	}
 
@@ -63,6 +73,18 @@ public class Main extends ApplicationAdapter {
 	public void gameLoop() {
 		setCameraPosition();
 		for(Player curPlayer : this.players){
+			//update path
+			//find player's current node position
+			int startingNodeX = pathFinder.getNodeFromOffsetX(curPlayer.getOffsetX());
+			int startingNodeY = pathFinder.getNodeFromOffsetY(curPlayer.getOffsetY());
+			if(curPlayer.getCurRoute() != null && curPlayer.getCurRoute().getCurDestination() != null) {
+				int endingNodeX = curPlayer.getCurRoute().getCurDestination().getX();
+				int endingNodeY = curPlayer.getCurRoute().getCurDestination().getY();
+				Path curPath = new Path(this.pathFinder.findPath(startingNodeX, startingNodeY, endingNodeX, endingNodeY));
+				if(!(startingNodeX == endingNodeX && startingNodeY == endingNodeY)) {
+					curPlayer.getCurRoute().setCurPath(curPath);
+				}
+			}
 			curPlayer.update();
 		}
 	}
@@ -131,11 +153,31 @@ public class Main extends ApplicationAdapter {
 	}
 	
 	/**
+	 * Initializes the pathFinder class - AStar
+	 */
+	public void initializePathFinder() {
+		int fieldWidthInNodes = (int) Math.ceil(this.fieldWidth/this.playerWidth);
+		int fieldHeightInNodes = (int) Math.ceil(this.fieldHeight/this.playerHeight);
+		this.nodeWidth = this.playerWidth;
+		this.nodeHeight = this.playerHeight;
+		int[][] nodes = new int[fieldWidthInNodes][fieldHeightInNodes];
+		for(int x = 0; x < nodes.length; x++) {
+			for(int y = 0; y < nodes[0].length; y++) {
+				
+			}
+		}
+		//node width and node height are the same as player width and player height here
+		this.pathFinder = new AStar(this.players, nodes, this.nodeWidth, this.nodeHeight, this.playerWidth, this.playerHeight);
+	}
+	
+	/**
 	 * Initialize players
 	 * This is just hardcoded for now
 	 */
 	public void initializePlayers() {
 		ArrayList<Player> curPlayers = playBuilder.loadPlay("test_formation", new Point(fieldWidth/2, 250));
 		this.players = curPlayers;
+		this.playerWidth = this.players.get(0).getCurTexture().getWidth();
+		this.playerHeight = this.players.get(0).getCurTexture().getHeight();
 	}
 }

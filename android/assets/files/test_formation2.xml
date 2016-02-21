@@ -1,0 +1,29 @@
+<formation>
+	<side>offense</side>
+	<player>
+		<type>center</type>
+		<action>
+		    <type>route</type>
+		    <route>
+			    <node>
+			        <x>0</x>
+			        <y>3</y>
+			    </node>
+			    <node>
+			        <x>0</x>
+			        <y>5</y>
+			    </node>
+			    <node>
+			        <x>-5</x>
+			        <y>0</y>
+			    </node>
+			    <node>
+			        <x>0</x>
+			        <y>20</y>
+			    </node>
+		    </route>
+		</action>
+		<x>0</x>
+		<y>0</y>
+	</player>
+</formation>

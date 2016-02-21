@@ -46,9 +46,7 @@ public class Player {
 	 * Main loop functionality for the player
 	 */
 	public void update() {
-		if(this.curRoute != null && this.curRoute.getPath().size() > 0) {
-			updatePlayerRoute();
-		}
+		updatePlayerRoute();
 		
 		this.offsetX += dx;
 		this.offsetY += dy;
@@ -60,27 +58,36 @@ public class Player {
 	public void updatePlayerRoute() {
 		boolean xDestinationMet = false;
 		boolean yDestinationMet = false;
-		Node curDestination = curRoute.getPath().get(0);
-		//evaluate current destination
-		if(curDestination.getX() > this.offsetX) {
-			this.dx = 1;
-		} else if(curDestination.getX() < this.offsetX) {
-			this.dx = -1;
-		} else if(curDestination.getX() == this.offsetX) {
-			xDestinationMet = true;
+		if(curRoute != null && curRoute.getCurDestination() != null) {
+			Node curDestination = curRoute.getCurDestination();
+			//evaluate current destination
+			if(curDestination.getOffsetX() > this.offsetX) {
+				this.dx = 1;
+			} else if(curDestination.getOffsetX() < this.offsetX) {
+				this.dx = -1;
+			} else if(curDestination.getOffsetX() == this.offsetX) {
+				xDestinationMet = true;
+				this.dx = 0;
+			}
+			if(curDestination.getOffsetY() > this.offsetY) {
+				this.dy = 1;
+			} else if(curDestination.getOffsetY() < this.offsetY) {
+				this.dy = -1;
+			} else if(curDestination.getOffsetY() == this.offsetY) {
+				yDestinationMet = true;
+				this.dy = 0;
+			}
+			//if both destinations have been met, set the next destination from the path
+			if(xDestinationMet && yDestinationMet) {
+				curRoute.getCurPath().getNodes().remove(curDestination);
+				if(curRoute.getCurPath().getNodes().size() == 0) {
+					curRoute.getRoute().remove(curRoute.getCurPath());
+				}
+			}
+		//no route exists
+		} else {
 			this.dx = 0;
-		}
-		if(curDestination.getY() > this.offsetY) {
-			this.dy = 1;
-		} else if(curDestination.getY() < this.offsetY) {
-			this.dy = -1;
-		} else if(curDestination.getY() == this.offsetY) {
-			yDestinationMet = true;
 			this.dy = 0;
-		}
-		//if both destinations have been met, set the next destination from the path
-		if(xDestinationMet && yDestinationMet) {
-			curRoute.getPath().remove(curDestination);
 		}
 	}
 	
@@ -102,6 +109,10 @@ public class Player {
 	
 	public Texture getCurTexture() {
 		return this.curTexture;
+	}
+	
+	public Route getCurRoute() {
+		return this.curRoute;
 	}
 	
 }
